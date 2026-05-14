@@ -1,0 +1,10 @@
+$stats = Database::fetchOne("
+SELECT 
+    COUNT(*) AS total,
+    SUM(CASE WHEN status = 'pending' THEN 1 ELSE 0 END) AS pending,
+    SUM(CASE WHEN status = 'under_review' THEN 1 ELSE 0 END) AS reviewing,
+    SUM(CASE WHEN status = 'contract_offered' THEN 1 ELSE 0 END) AS contracts,
+    SUM(CASE WHEN submitted_at >= DATE_SUB(NOW(), INTERVAL 7 DAY) THEN 1 ELSE 0 END) AS this_week,
+    SUM(CASE WHEN submitted_at >= DATE_SUB(NOW(), INTERVAL 30 DAY) THEN 1 ELSE 0 END) AS this_month
+FROM submissions
+");
